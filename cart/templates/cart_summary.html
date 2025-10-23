@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<main>
+	<header class="row tm-welcome-section">
+		<h2 class="col-12 text-center tm-section-title"><strong>سبد خرید شما</strong></h2>
+		<p class="col-12 text-center"><strong>| آیتم هایی که به سبد خریدتون اضافه کرده اید را اینجا مشاهده کنید
+				|</strong></p>
+	</header>
+
+	<center>
+	{% if user.is_authenticated %}
+	 {% if products %}
+	  <center>
+		  <a href="{% url 'cart_finalcheck' %}" class="btn btn-info"><strong>تایید نهایی</strong></a>
+	  </center>
+	  <br>
+	  <h5 class="card-title"><strong>مجموع قیمت : {{ total_price|intcomma }} تومان</strong></h5>
+	  <br>
+	  {% for prod in products %}
+		<div class="card text-center tm-paging-item" style="width: 40rem;">
+			<div class="card-body">
+				<h4 class="card-title"><strong>{{ prod.name }}</strong></h4>
+				{% if prod.is_sale %}
+				<p class="card-text"><strong>قیمت واحد : {{ prod.sale_price|intcomma }} تومان (* با تخفیف)</strong></p>
+				{% else %}
+				<p class="card-text"><strong>قیمت واحد : {{ prod.price|intcomma }} تومان</strong></p>
+				{% endif %}
+				<p class="card-text"><strong>تعداد سفارش داده شده :
+						{% for key,value in quantities.items %}
+						{% if key == prod.id|slugify %}
+						{{ value }}
+						{% endif %}
+						{% endfor %}
+					</strong></p>
+				<hr>
+				<button type="button" data-index="{{ prod.id }}" class="btn btn-danger delete-product">
+					حذف از سبد خرید
+				</button>
+			</div>
+		</div>
+		<br>
+	  {% endfor %}
+	 {% else %}
+	  <br>
+	  <h3>سبد خرید شما خالیست &#128531;</h3>
+	 {% endif %}
+	{% else %}
+		<br>
+		<h3>ابتدا از طریق بخش پروفایل وارد حساب کاربری خود شوید یا یک حساب کاربری بسازید.</h3>
+	{% endif %}
+	</center>
+</main>
+
+<script>
+	$(document).on('click', '.delete-product', function (e) {
+		e.preventDefault();
+
+		$.ajax({
+			type: 'POST',
+			url: '{% url "cart_delete" %}',
+			data: {
+				product_id: $(this).data('index'),
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				action: 'post'
+			},
+
+			success: function (json) {
+				//console.log(json)
+				//document.getElementById("cart_quantity").textContent = json.qty
+				location.reload();
+			},
+			error: function (xhr, errmsg, err) {
+			}
+		})
+	})
+</script>
+{% endblock %}

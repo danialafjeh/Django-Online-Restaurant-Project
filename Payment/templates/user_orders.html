@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<main>
+    <header class="row tm-welcome-section">
+        <h2 class="col-12 text-center tm-section-title"><strong>پیگیری سفارشات</strong></h2>
+        <p class="col-12 text-center"><strong>| سفارشاتی که ثبت کرده اید را اینجا مشاهده کنید |</strong></p>
+    </header>
+    <br>
+    {% if active_orders or canceled_orders or delivered_orders %}
+    <div class="container">
+        <div class="row">
+            <center>
+                <div class="card text-center border-success" style="width: 65rem;">
+                    <div class="card-header">
+                        <h4><strong>سفارشات شما</strong></h4>
+                    </div>
+                    <div class="card-body">
+                        <br>
+                        <p class="text-info"><strong>سفارشات فعال</strong></p>
+                        <br>
+                        <table class="table border-success">
+                            <thead>
+                                <tr>
+                                    <th scope="col">کد سفارش</th>
+                                    <th scope="col">به نام</th>
+                                    <th scope="col">تاریخ ثبت</th>
+                                    <th scope="col">تاریخ آخرین ویرایش</th>
+                                    <th scope="col">وضعیت</th>
+                                    <th scope="col">جزئیات سفارش</th>
+                                    <th scope="col">لغو سفارش</th>
+                                    <th scope="col">پرداخت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in active_orders %}
+                                <tr>
+                                    <th scope="row">#{{ order.id }}</th>
+                                    <td>{{ order.full_name }}</td>
+                                    <td>{{ order.date_ordered|date:"y-m-d h:i:s" }}</td>
+                                    <td>{{ order.last_update|date:"y-m-d h:i:s" }}</td>
+                                    <td>{{ order.get_status_display }}</td>
+                                    <td><a href="{% url 'order_details' order.id %}" class="btn btn-primary">مشاهده</a></td>
+                                    <td><a href="{% url 'cancel_order' order.id %}" class="btn btn-danger">لغو کردن</a></td>
+                                    <td><a href="#" class="btn btn-success">درگاه</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <br>
+                        <p class="text-danger"><strong>سفارشات لغو شده</strong></p>
+                        <br>
+                        <table class="table border-success">
+                            <thead>
+                                <tr>
+                                    <th scope="col">کد سفارش</th>
+                                    <th scope="col">به نام</th>
+                                    <th scope="col">تاریخ ثبت</th>
+                                    <th scope="col">تاریخ آخرین ویرایش</th>
+                                    <th scope="col">وضعیت</th>
+                                    <th scope="col">جزئیات سفارش</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in canceled_orders %}
+                                <tr>
+                                    <th scope="row">#{{ order.id }}</th>
+                                    <td>{{ order.full_name }}</td>
+                                    <td>{{ order.date_ordered|date:"y-m-d h:i:s" }}</td>
+                                    <td>{{ order.last_update|date:"y-m-d h:i:s" }}</td>
+                                    <td>{{ order.get_status_display }}</td>
+                                    <td><a href="{% url 'order_details' order.id %}" class="btn btn-primary">مشاهده</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <br>
+                        <p class="text-success"><strong>سفارشات تحویل داده شده</strong></p>
+                        <br>
+                        <table class="table border-success">
+                            <thead>
+                                <tr>
+                                    <th scope="col">کد سفارش</th>
+                                    <th scope="col">به نام</th>
+                                    <th scope="col">تاریخ ثبت</th>
+                                    <th scope="col">تاریخ آخرین ویرایش</th>
+                                    <th scope="col">وضعیت</th>
+                                    <th scope="col">جزئیات سفارش</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in delivered_orders %}
+                                <tr>
+                                    <th scope="row">#{{ order.id }}</th>
+                                    <td>{{ order.full_name }}</td>
+                                    <td>{{ order.date_ordered|date:"y-m-d h:i:s" }}</td>
+                                    <td>{{ order.last_update|date:"y-m-d h:i:s" }}</td>
+                                    <td>{{ order.get_status_display }}</td>
+                                    <td><a href="{% url 'order_details' order.id %}" class="btn btn-primary">مشاهده</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </center>
+        </div>
+    </div>
+    {% else %}
+    <center>
+        <h4><strong>سفارشی ثبت نشده است</strong></h4>
+    </center>
+    {% endif %}
+</main>
+{% endblock %}

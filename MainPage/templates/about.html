@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+	<main>
+		<header class="row tm-welcome-section">
+			<h2 class="col-12 text-center tm-section-title"><strong>درباره ما</strong></h2>
+			<p class="col-12 text-center"><strong>| درباره رستوران ما بیشتر بدانید |</strong></p>
+		</header>
+
+		<div class="tm-container-inner tm-persons">
+			<div class="row">
+				{% for person in staff %}
+				<article class="col-lg-6" dir="ltr">
+					<figure class="tm-person">
+						<img src="{{ person.picture.url }}" alt="Image" class="img-fluid tm-person-img" />
+						<figcaption class="tm-person-description">
+							<h4 class="tm-person-name">{{ person.first_name }} {{ person.last_name }}</h4>
+							<p class="tm-person-title"><strong>{{ person.role.get_name_display }}</strong></p>
+							<p class="tm-person-about">Born in : {{ person.birth }}</p>
+							<p class="tm-person-about">From : {{ person.country }}</p>
+						</figcaption>
+					</figure>
+				</article>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="tm-container-inner tm-featured-image">
+			<div class="row">
+				<div class="col-12">
+					<div class="placeholder-2">
+						<div class="parallax-window-2" data-parallax="scroll" data-image-src="{% static 'img/about-06.jpg' %}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</main>
+	</body>
+</html>
+{% endblock %}

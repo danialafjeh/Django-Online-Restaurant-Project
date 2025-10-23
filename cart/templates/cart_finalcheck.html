@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<main>
+    <header class="row tm-welcome-section">
+        <h2 class="col-12 text-center tm-section-title"><strong>تایید نهایی سفارش</strong></h2>
+        <p class="col-12 text-center"><strong>| سفارش خود را تایید می کنید ؟ |</strong></p>
+    </header>
+    <br>
+    <div class="container">
+        <div class="row">
+            <center>
+                <div class="card text-center border-success" style="width: 50rem;">
+                    <div class="card-header">
+                        <h4><strong>سفارش شما</strong></h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table border-success">
+                            <thead>
+                                <tr>
+                                    <th scope="col">نام آیتم</th>
+                                    <th scope="col">قیمت واحد</th>
+                                    <th scope="col">تعداد</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prod in products %}
+                                <tr>
+                                    <td>{{ prod.name }}</td>
+                                    {% if prod.is_sale %}
+                                    <td>{{ prod.sale_price|intcomma }} تومان</td>
+                                    {% else %}
+                                    <td>{{ prod.price|intcomma }} تومان</td>
+                                    {% endif %}
+                                    <td>
+                                        {% for key,value in quantities.items %}
+                                        {% if key == prod.id|slugify %}
+                                        {{ value }} عدد
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <p class="text-success"><strong>مبلغ کل جهت پرداخت : {{ total_price|intcomma }} تومان</strong>
+                        </p>
+                        <br><br>
+                        <center>
+                            <div class="card text-center border-dark" style="width: 45rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title"><strong>مشخصات ارسال سفارش</strong></h5>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">آدرس</th>
+                                                <td scope="col">{{ user_delivery.address }}</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">شماره تماس</th>
+                                                <td>{{ user_delivery.phone }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">سفارش به نام</th>
+                                                <td>{{ user_delivery.full_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">شهر</th>
+                                                <td>{{ user_delivery.city}}</td>
+                                            </tr>
+                                             <tr>
+                                                <th scope="row">منطقه</th>
+                                                <td>{{ user_delivery.state }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a class="btn btn-warning" href="{% url 'profile_user' %}"><strong>ویرایش</strong></a>
+                                </div>
+                            </div>
+                            <br><br>
+                            <form method="POST" action="{% url 'create_order' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_delivery_id" value="{{ user_delivery.user.id }}">
+                                <button type="submit" class="btn btn-success">ثبت سفارش</button>
+                            </form>
+                        </center>
+                    </div>
+                </div>
+            </center>
+        </div>
+    </div>
+</main>
+{% endblock %}

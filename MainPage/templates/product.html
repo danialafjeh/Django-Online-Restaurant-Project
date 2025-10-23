@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<main>
+    <header class="row tm-welcome-section">
+		<h2 class="col-12 text-center tm-section-title"><strong>{{ category.name }} ها</strong></h2>
+		<p class="col-12 text-center"><strong>کیفیت بالا | خوشمزه | قیمت مناسب | انواع غذاها</strong></p>
+	</header>
+
+	<div class="tm-paging-links">
+		<p class="tm-paging-item">
+          <a class="tm-paging-link" onclick="event.stopImmediatePropagation();" href="{% url 'home' %}"><strong>بازگشت به صفحه اصلی</strong></a>
+		</p>
+	</div>
+
+    <div class="row tm-gallery">
+        <div id="tm-gallery-page-pizza" class="tm-gallery-page">
+		    {% for prod in products %}
+              {% if prod.is_sale %}
+              <article class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item">
+				  <fiaption>
+						  <gure>
+					  <img src="{{ prod.picture.url }}" alt="Image" class="img-fluid tm-gallery-img" />
+					  <figch4 class="tm-gallery-title"><strong>{{ prod.name }}</strong> | (Off Sale)</h4>
+						  <p class="tm-gallery-description">
+						  {{ prod.description }}
+						  </p>
+						  <p class="tm-gallery-price">
+						    <strike>{{ prod.price|intcomma }} تومان</strike> {{ prod.sale_price|intcomma }} تومان
+							<br>
+							<strong class="tm-gallery-price">تعداد:</strong>
+							<select class="form-select form-select-sm" aria-label="Small select example" id="cart-qty-{{ prod.id }}">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+                            </select>
+							<br>
+							<button class="btn btn-success" type='button' value='{{ prod.id }}' id='add-cart-{{ prod.id }}'>افزودن به سبد خرید</button>
+						  </p>
+					  </figcaption>
+				  </figure>
+			  </article>
+			  {% else %}
+              <article class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item">
+				  <fiaption>
+						  <gure>
+					  <img src="{{ prod.picture.url }}" alt="Image" class="img-fluid tm-gallery-img" />
+					  <figch4 class="tm-gallery-title"><strong>{{ prod.name }}</strong></h4>
+						  <p class="tm-gallery-description">
+						  {{ prod.description }}
+						  </p>
+						  <p class="tm-gallery-price">
+						    قیمت : {{ prod.price|intcomma }} تومان
+						    <br>
+							<strong class="tm-gallery-price">تعداد:</strong>
+							<select class="form-select form-select-sm" aria-label="Small select example" id="cart-qty-{{ prod.id }}">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+                            </select>
+							<br>
+							<button class="btn btn-success" type='button' value='{{ prod.id }}' id='add-cart-{{ prod.id }}'>افزودن به سبد خرید</button>
+						  </p>
+					  </figcaption>
+				  </figure>
+			  </article>
+			  {% endif %} 
+			{% endfor %}
+        </div>
+    </div>
+</main>
+
+{% for prod in products %}
+<script>
+	$(document).on('click', '#add-cart-{{ prod.id }}', function(e){
+    e.preventDefault();
+    $.ajax({
+      type:'POST',
+      url: '{% url "cart_add" %}',
+      data:{
+        product_id: $('#add-cart-{{ prod.id }}').val(),
+        product_qty: $('#cart-qty-{{ prod.id }} option:selected').text(),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+      },
+
+      success: function(json){
+        //console.log(json)
+        document.getElementById("cart_quantity").textContent = json.qty
+        location.reload()
+      },
+      error: function(xhr, errmsg, err){  
+      }
+    })
+  })
+</script>
+{% endfor %}
+
+{% endblock %}

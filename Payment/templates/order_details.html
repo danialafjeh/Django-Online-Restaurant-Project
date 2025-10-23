@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<main>
+    <header class="row tm-welcome-section">
+        <h2 class="col-12 text-center tm-section-title"><strong>جزئیات سفارش</strong></h2>
+        <p class="col-12 text-center"><strong>| جزئیات سفارش خود را اینجا مشاهده نمایید |</strong></p>
+    </header>
+    <br>
+    <div class="container">
+        <div class="row">
+            <center>
+                {% for order_info in order %}
+                <div class="card text-center border-success" style="width: 60rem;">
+                    <div class="card-header">
+                        <h4><strong>کد سفارش : {{ order_info.id }}#</strong></h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table border-dark">
+                            <thead>
+                                <tr>
+                                    <th scope="col">به نام</th>
+                                    <td>{{ order_info.full_name }}</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">شماره تماس</th>
+                                    <td>{{ order_info.phone }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ایمیل</th>
+                                    <td>{{ order_info.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ارسال به آدرس</th>
+                                    <td>{{ order_info.delivery_address }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">تاریخ ثبت</th>
+                                    <td>{{ order_info.date_ordered|date:"y-m-d h:i:s" }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">تاریخ آخرین ویرایش</th>
+                                    <td>{{ order_info.last_update|date:"y-m-d h:i:s" }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">وضعیت</th>
+                                    <td>{{ order_info.get_status_display }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">مبلغ کل</th>
+                                    <td>{{ order_info.amount_paid|intcomma }} تومان</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <center>
+                            <div class="card text-center border-success" style="width: 45rem;">
+                                <div class="card-body ">
+                                    <h5 class="card-title"><strong>آیتم های داخل سفارش</strong></h5>
+                                    <table class="table border-dark">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">نام آیتم</th>
+                                                <th scope="col">قیمت</th>
+                                                <th scope="col">تعداد</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order_items %}
+                                            <tr>
+                                                <td>{{ item.products.name }}</td>
+                                                <td>{{ item.price|intcomma }} تومان</td>
+                                                <td>{{ item.quantity }} عدد</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </center>
+                        <br>
+                    </div>
+                </div>
+                <br>
+                <a href="{% url 'user_orders' %}" class=" btn btn-secondary"><strong>بازگشت به صفحه پیگیری سفارشات</strong></a>
+                {% endfor %}
+            </center>
+        </div>
+    </div>
+</main>
+{% endblock %}

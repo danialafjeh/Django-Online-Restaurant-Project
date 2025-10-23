@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Danial Restaurant</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.1/css/all.css" rel="stylesheet">
+    <link href="{% static 'css/all.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/templatemo-style.css' %}" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+    .badge:after{
+        content:attr(value);font-size:17px;color: #f8f7f7;background: red; border-radius:50%;padding: 7px;position:relative;left:-8px;top:-10px;opacity:0.9;
+    }
+    </style>
+</head>
+
+<body dir="rtl">
+    <div class="container">
+        <!-- Navbar -->
+        <div class="parallax-window" data-parallax="scroll" data-image-src="{% static 'img/simple-house-01.jpg' %}">
+            <div class="tm-header">
+                <div class="row tm-header-inner">
+                    <div class="col-md-6 col-12">
+                        <img src="{% static 'img/simple-house-logo.png' %}" alt="Logo" class="tm-site-logo" />
+                        <div class="tm-site-text-box">
+                            <h1 class="tm-site-title">Daniel Restaurant</h1>
+                            <h6 class="tm-site-description">
+                                <a class="col-12 text-center" href="{% url 'cart_summary' %}" dir="ltr">
+		                           <i class="fa badge fa-lg btn btn-success" id="cart_quantity" value="{{ cart|length }}">&#xf07a;سبد خرید </i>
+	                            </a>
+                            </h6>
+                        </div>
+                    </div>
+                    <nav class="col-md-6 col-12">
+                        <ul class="tm-nav-ul">
+                            <li class="tm-nav-li">
+                                <a href="{% url 'home' %}" class="tm-nav-link btn btn-success"><strong>خانه</strong></a>
+                            </li>
+                            <li class="tm-nav-li">
+                                <div class="dropdown">
+                                    <a class="tm-nav-link btn btn-success dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <strong>پروفایل</strong>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        {% if user.is_authenticated %}
+                                        <li>
+                                            <a href="{% url 'profile_user' %}" class="dropdown-item"><strong class="btn btn-success">| اطلاعات حساب کاربری |</strong></a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'user_orders' %}" class="dropdown-item"><strong class="btn btn-success">| پیگیری سفارشات من |</strong></a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'logout' %}" class="dropdown-item"><strong class="btn btn-success">| خروج از حساب کاربری |</strong></a>
+                                        </li>
+                                        {% else %}
+                                        <li>
+                                            <a href="{% url 'signup' %}" class="dropdown-item"><strong class="btn btn-success">| ساخت حساب کاربری |</strong></a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'login' %}" class="dropdown-item"><strong class="btn btn-success">| ورود به حساب کاربری |</strong></a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="tm-nav-li">
+                                <a href="{% url 'aboutus' %}" class="tm-nav-link btn btn-success"><strong>درباره ما</strong></a>
+                            </li>
+
+                            <li class="tm-nav-li">
+                                <a href="{% url 'contactus' %}" class="tm-nav-link btn btn-success"><strong>ارتباط با ما</strong></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <!-- Content -->
+        {% block content %}
+
+        {% endblock %}
+        <!-- Footer -->
+        <footer class="tm-footer text-center">
+            <p>Created by Danial Afjeh | Online-Restaurant-Project</p>
+        </footer>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/parallax.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+            integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+            crossorigin="anonymous"></script>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <header class="row tm-welcome-section">
+        <h2 class="col-12 text-center tm-section-title"><strong>ثبت نام</strong></h2>
+        <p class="col-12 text-center"><strong>| حساب کاربری خود را بسازید |</strong></p>
+    </header>
+    <br>
+    <div class="container">
+        <div class="row">
+            <center>
+                <div class="col-md-6">
+                    <form action="{% url 'signup' %}" method="POST" class="tm-contact-form">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="form-group">
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+                        <div class="form-group tm-d-flex">
+                            <button type="submit" class="tm-btn tm-btn-success tm-btn-middle">
+                                ساخت حساب کاربری
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </center>
+        </div>
+    </div>
+</main>
+{% endblock %}
